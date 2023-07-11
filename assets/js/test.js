@@ -45,14 +45,18 @@
     }
     
     function createTime(milliseconds, hours, minutes) {
-        let newDate = new Date();
-        if (hours && minutes) {
+        const currentDate = new Date();
+        const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMinutes());
+        
+        if ((hours >= 0 && hours <= 23) && (minutes >= 0 && minutes <= 59)) {
             newDate.setHours(hours);
             newDate.setMinutes(minutes);
         }
+        
         if (milliseconds) {
             newDate.setMilliseconds(milliseconds);
         }
+        
         return newDate.toLocaleTimeString(`pt-BR`, { timeStyle: `short` });
     }
     
@@ -113,14 +117,14 @@
         if (outcome.firstChild) {
             outcome.removeChild(outcome.firstChild);
         }
-        if (firstInput.value) {
+        if (firstInput.value !== "") {
             const hours = parseInt(firstInput.value.slice(0, 2));
             const minutes = parseInt(firstInput.value.slice(3, 5));
-            let schedule = new Schedule(0, hours, minutes, Date.now());
+            let schedule = new Schedule(undefined, hours, minutes, Date.now());
             createTable(schedule);
             saveSchedule(schedule);
         } else {
-            let schedule = new Schedule(0, null, null, Date.now());
+            let schedule = new Schedule(undefined, undefined, undefined, Date.now());
             createTable(schedule);
             saveSchedule(schedule);
         }
